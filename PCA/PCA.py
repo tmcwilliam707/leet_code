@@ -5,7 +5,7 @@ from io import BytesIO
 from sklearn.decomposition import PCA
 import matplotlib.pyplot as plt
 
-url = "https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.motortrend.com%2Fnews%2Ftesla-cybertruck-ev-pickup-specs-payload-towing-capacity-exoskeleton%2F&psig=AOvVaw3HSHJUhm4i6zyubCgf8-lo&ust=1706485705657000&source=images&cd=vfe&opi=89978449&ved=0CBMQjRxqFwoTCLCVlejg_oMDFQAAAAAdAAAAABAD"
+url = "PCA/Image.jpg"
 response = requests.get(url)
 img = Image.open(BytesIO(response.content))
 
@@ -17,7 +17,7 @@ img_array = np.array(img_gray)
 
 # Flatten the image array and perform PCA
 img_flattened = img_array.flatten().reshape(1, -1)
-pca = PCA(n_components=2)
+pca = PCA(n_components=200)
 pca.fit(img_flattened)
 
 # Use the principal components to reconstruct the image
@@ -39,3 +39,6 @@ plt.imshow(reconstructed_img, cmap='gray')
 plt.title('Reconstructed Image')
 
 plt.show()
+
+reconstructed_img_pil = Image.fromarray(reconstructed_img.astype('uint8'))
+reconstructed_img_pil.save('reconstructed_image.jpg')
