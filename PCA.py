@@ -7,7 +7,7 @@ import matplotlib.pyplot as plt
 
 url = "https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.motortrend.com%2Fnews%2Ftesla-cybertruck-ev-pickup-specs-payload-towing-capacity-exoskeleton%2F&psig=AOvVaw3HSHJUhm4i6zyubCgf8-lo&ust=1706485705657000&source=images&cd=vfe&opi=89978449&ved=0CBMQjRxqFwoTCLCVlejg_oMDFQAAAAAdAAAAABAD"
 response = requests.get(url)
-img = Image.open(BytesIO(response.content))
+img = Image.open(BytesIO(response.content))0
 
 # Convert the image to grayscale
 img_gray = img.convert('L')

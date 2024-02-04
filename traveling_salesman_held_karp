@@ -1,0 +1,82 @@
+from itertools import combinations
+
+def held_karp(dists):
+    n = len(dists)
+
+
+    C = {}
+
+    for k in range(1, n):
+        C[(1 << k, k)] = (dists[0][k], 0)
+
+    for subset_size in range(2, n):
+        for subset in combinations(range(1, n), subset_size):
+
+            bits = 0
+            for bit in subset:
+                bits |= 1 << bit
+            for k in subset:
+                prev = bits & ~(1 << k)
+
+                res = []
+                for m in subset:
+                    if m == 0 or m == k:
+                        continue
+                    res.append((C[(prev, m)][0] + dists[m][k], m))
+                C[(bits, k)] = min(res)
+
+    bits = (2**n - 1) -1
+
+    res = []
+    for k in range(1,n):
+        res.append((C[(bits, k)][0] + dists[k][0], k))
+    opt, parent = min(res)
+
+    path = []
+
+    for i in range(n-1):
+        path.append(parent)
+        new_bits = bits & ~(1 << parent)
+        _, parent = C[(bits, parent)]
+        bits = new_bits
+
+        path.append(0)
+
+        return opt, list(reversed(path))
+    
+
+def test_held_karp():
+    # Create a symmetric distance matrix for 4 cities
+    # The distance from a city to itself is 0
+    # The distance from city i to city j is the same as from city j to city i
+    dists = [
+        [0, 10, 15, 20],
+        [10, 0, 35, 25],
+        [15, 35, 0, 30],
+        [20, 25, 30, 0]
+    ]
+
+    # Define city names
+    cities = ['CityA', 'CityB', 'CityC', 'CityD']
+
+    # Call the held_karp function
+    length, path_indices = held_karp(dists)
+
+    # Convert city indices to names
+    path_names = [cities[i] for i in path_indices]
+
+    # Print the result
+    print(f"The shortest path has length {length} and visits the cities in this order: {path_names}")
+
+    # Create a list of paths with their lengths
+    paths_with_lengths = [(length, path_names)]
+
+    # Sort the paths in descending order of their lengths
+    paths_with_lengths.sort(reverse=True)
+
+    # Print the paths
+    for length, path in paths_with_lengths:
+        print(f"Path: {path}, Length: {length}")
+
+test_held_karp()
+    
